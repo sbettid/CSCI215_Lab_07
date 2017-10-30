@@ -3,7 +3,7 @@ Event Object usage
 
 Name: _______________________________________
 
-## DUE: 30 Nov 2017 @ 11:59 pm
+## DUE: 30 Oct 2017 @ 11:59 pm
 
 
 * Given the little Mario game provided, make Mario walk Left and Right, when the user press L and R, respectively.
