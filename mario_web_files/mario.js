@@ -12,6 +12,10 @@ window.onload = init; // calls the function named "init"
 // declare the background image
 var bgImage = new Image();
 
+
+//variable for playing audio
+var audioPlaying = false;
+var sound;
 // Is called when the window loads;
 function init() {
 	
@@ -36,6 +40,15 @@ function init() {
 	draw();
 
 	// TODO: (OPTIONAL) set mario_08.wav as background music
+	sound = document.createElement("audio"); //create html element
+
+	sound.src = "mario_08.wav"; //set audio source file
+	sound.setAttribute("preload", "auto"); //automatic preload
+    sound.setAttribute("controls", "none"); //no controls
+    sound.style.display = "none"; //do not display the element
+
+	sound.pla();
+	document.body.appendChild(sound);
 
 }
 
@@ -69,7 +82,7 @@ function draw() {
 	 */
 	function renderMario(){
 		if (Mario.y > 535 && Mario.moving == "up") {
-			console.log("Mario position: " + Mario.y);
+			//console.log("Mario position: " + Mario.y);
 			Mario.Image.src = "mario2.png";
 			ctx.drawImage(Mario.Image, Mario.x, Mario.y, Mario.w, Mario.h);
 			// Change the y value each time 
@@ -77,7 +90,7 @@ function draw() {
 		}else if(Mario.y <= 535 && Mario.moving == "up"){
 			Mario.moving = "down";
 		} else if(Mario.y < 615 && Mario.moving == "down"){
-            console.log("Mario position: " + Mario.y);
+           // console.log("Mario position: " + Mario.y);
 			Mario.Image.src = "mario2.png";
 			ctx.drawImage(Mario.Image, Mario.x, Mario.y, Mario.w, Mario.h);
 			Mario.y += 5; // move 5 px back down after a jump
@@ -87,10 +100,9 @@ function draw() {
 		}else{
 			Mario.moving = "no";
 			Mario.Image.src = "mario1.png";
-
 			ctx.drawImage(Mario.Image, Mario.x, Mario.y, Mario.w, Mario.h);
 			clearInterval(Mario.timer); // kills the timer
-			console.log("Mario is now standing");
+			//console.log("Mario is now standing");
 		}	
 	}
 	///////////////////////////////////////////////////////////////////
@@ -98,6 +110,7 @@ function draw() {
 
 	/*
 		Function that makes Mario walk either to the left or to the right
+		making sure that he does not walk outside the screen
 	 */
 
 	function marioWalk(){
@@ -109,7 +122,7 @@ function draw() {
             Mario.x -= 10;
             console.log("Mario going left");
 
-		} else if (Mario.moving == "right" && Mario.x <= 1200){
+		} else if (Mario.moving == "right" && Mario.x <= 1100){
             ctx.drawImage(bgImage, 0, 0);
             Mario.Image.src = "marioturnsright.png";
             ctx.drawImage(Mario.Image, Mario.x, Mario.y, Mario.w, Mario.h);
@@ -139,19 +152,20 @@ function draw() {
 
         	Mario.timer = setInterval(render, Mario.timerInterval);
 
-    	} else if( keycode == 76 && Mario.moving == "no"){ //Users wants Mario to walk Left
-			Mario.moving = "left";
+    	} else if( keycode == 76){ //Users wants Mario to walk Left
+            //Make him walk left
+    		Mario.moving = "left";
 			marioWalk();
-    		//Make him walk left
-
-		} else if (keycode == 82 && Mario.moving == "no"){ //Users wants Mario to walk right
+		} else if (keycode == 82){ //Users wants Mario to walk right
 
     		//Make him walk right
             Mario.moving = "right";
             marioWalk();
 		}
 
-
+		//play music if is not playing
+		if(!audioPlaying)
+            sound.play();
 
     }
 
