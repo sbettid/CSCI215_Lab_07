@@ -20,7 +20,6 @@ var sound;
 function init() {
 	
 	// Initialize Mario Object
-	// TODO: Put Mario on the ground instead of the cloud
 	Mario = {
 		x: 20,
 		y: 615,
@@ -39,7 +38,9 @@ function init() {
 	bgImage.src = "marioBG.jpg";
 	draw();
 
-	// TODO: (OPTIONAL) set mario_08.wav as background music
+	//The background music is created
+	//On Chrome, the user have to press a key in order to let the music start, so it is activated only when the user
+	//presses a key
 	sound = document.createElement("audio"); //create html element
 
 	sound.src = "mario_08.wav"; //set audio source file
@@ -47,7 +48,7 @@ function init() {
     sound.setAttribute("controls", "none"); //no controls
     sound.style.display = "none"; //do not display the element
 
-	sound.pla();
+
 	document.body.appendChild(sound);
 
 }
@@ -67,9 +68,7 @@ function draw() {
         ctx.drawImage(Mario.Image, Mario.x, Mario.y, Mario.w, Mario.h );
 	}
 
-	/*
-	 * TODO: Draw Mario's initial image
-	 */
+	//Drawing matio initial image
 
 	/////////////////////////////////////////////////////////////////
 	var render = function () {
@@ -77,9 +76,7 @@ function draw() {
 		renderMario();
 	}
 
-	/*
-	 * TODO: Alter the y coordinates so Mario will jump while on the ground
-	 */
+	//Mario is now jumping on the ground
 	function renderMario(){
 		if (Mario.y > 535 && Mario.moving == "up") {
 			//console.log("Mario position: " + Mario.y);
@@ -137,8 +134,7 @@ function draw() {
 	 * If Enter/Return is pressed, then call the render function
 	 * which paints the new scene to the canvas.
 	 *
-	 * TODO: Add code to set Mario image to proper image whether L or R button pressed
-	 * TODO: Stop Mario if he runs out of room
+	 *  Code for walking left/right when the user presses L/R was added
 	 *
 	 */
 	document.body.onkeydown = function(e) {  // listen for a key
@@ -152,27 +148,27 @@ function draw() {
 
         	Mario.timer = setInterval(render, Mario.timerInterval);
 
-    	} else if( keycode == 76){ //Users wants Mario to walk Left
+    	} else if( keycode == 76 && (Mario.moving == "no" || Mario.moving == "left") ){ //Users wants Mario to walk Left
+    		//and Mario is not already moving in another direction
             //Make him walk left
     		Mario.moving = "left";
 			marioWalk();
-		} else if (keycode == 82){ //Users wants Mario to walk right
-
+		} else if (keycode == 82 && (Mario.moving == "no" || Mario.moving == "right")){ //Users wants Mario to walk right
+			//and Mario is not moving in another direction
     		//Make him walk right
             Mario.moving = "right";
             marioWalk();
 		}
 
-		//play music if is not playing
-		if(!audioPlaying)
+		//play music if is not playing, on Chrome cannot be started before the user presses a key
+		if(!audioPlaying) {
             sound.play();
+            audioPlaying = true;
+        }
 
     }
 
-    /* TODO:
-     * TODO: Capture keycodes for L and R. In each, set a timeout that calls a function
-     * TODO: to face Mario forward after 200 ms. HINT: setTimeout(function, timeInMilliSecs)
-     */
+    //Call function to face Mario forward when the user releases the keys L/R
     document.body.onkeyup = function(e) {  // listen for a key
         e = event || window.event;             // any kind of event
         var keycode = e.charCode || e.keyCode; // any kind of key
@@ -185,9 +181,7 @@ function draw() {
     }
 
 
-    /*
-     * TODO: Face Mario forward. Do not forget to draw the background image first
-     */
+    //Change image so that Mario is now faced forward
     function faceForward() {
         ctx.drawImage(bgImage, 0, 0);
         Mario.Image.src = "mario1.png";
